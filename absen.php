@@ -1,59 +1,63 @@
 <?php
+include("connect.php");
 session_start();
-include 'connect.php';
 
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$username = $_SESSION['username'];
-$sql = "SELECT * FROM users WHERE username = ?";
+$username = $_SESSION["username"];
+$sql = "SELECT role FROM users WHERE username = '$username'";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
-$row = $result->fetch_assoc();
-$attendance_status = "present";
 
-$stmt->close();
-$conn->close();
+if($result){
+    $row = $result->fetch_assoc();
+    if($row["role"] != "admin"){
+        $http = "location: absensi.php";
+    }else{
+        $http = "location: dashboard.php";
+    }
+}
+
+$d = date("j");
+$sql = "SELECT date FROM d$d WHERE username= ?";
+
+$sql = "DELETE FROM d$d WHERE username = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$sql = "INSERT INTO d$d (username, date, status) VALUES(?, ?, ?)";
+header($http);
+
+
+
 ?>
 
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Absen</title>
-    <style>
-        body{
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-            text-align: center;
-            background-color: mintcream;
-            padding: 0;
-            margin: 0;
-        }
-        .header{
-            background-color: cadetblue;
-            display: flex;
-            position: relative;
-            align-content: center;
-            top: 0;
-            left: 0;
-            padding: 20px;
-            width: 100%;
-        }
-        .header h2{
-            margin: 20px;
-        }
-    </style>
+    <title>absen</title>
 </head>
 <body>
-    <div class="header">
-        <img width="60px" height="60px">
-        <h2><?php echo "$username"; ?></h2>
-    </div>
-    <button>
-        <a href="login.php">Logout</a>
-    </button>
+    <style>
+        body{
+            background-color: mintcream;
+            justify-content: center;
+            padding: 40px;
+        }
+        h1{
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        button{
+            background-color: red;
+            color: white;
+            padding: 20px;
+            width: 20%;
+        }
+        button:hover{
+            background-color: #ff3f3f;
+            color: midnightblue;
+        }
+    </style>
 </body>
 </html>

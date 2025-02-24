@@ -19,7 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
             $_SESSION['username'] = $username;
-            header("location: absen.php");
+            if($row["role"] == "admin"){
+                header("location: dashboard.php");
+            }else{
+                header("location: absensi.php");
+            }
         } else {
             $error = 2;
         }
@@ -81,8 +85,9 @@ $conn->close();
             color: white;
             font-size: 14px;
             border: none;
-            padding: 10px;
             cursor: pointer;
+            padding: 10px;
+            margin-top: 20px;
             width: 100%;
             border-radius: 5px;
         }
