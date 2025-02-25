@@ -9,6 +9,7 @@ $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// check user role
 if($result){
     $row = $result->fetch_assoc();
     if($row["role"] != "admin"){
@@ -19,15 +20,17 @@ if($result){
 }
 
 $d = date("j");
-$sql = "SELECT date FROM d$d WHERE username= ?";
+$date = date("Y-m-d");
+$time = date("H:i");
 
-$sql = "DELETE FROM d$d WHERE username = ?";
+$sql = "SELECT * FROM d$d WHERE username= ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
+$row = $result->fetch_assoc();
 
-$sql = "INSERT INTO d$d (username, date, status) VALUES(?, ?, ?)";
+
 header($http);
 
 

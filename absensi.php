@@ -1,5 +1,6 @@
 <?php
 session_start();
+mysqli_report(MYSQLI_REPORT_ALL);
 include 'connect.php';
 
 if (!isset($_SESSION['username'])) {
@@ -25,15 +26,19 @@ if($result->num_rows > 0){
     exit();
 }
 
-$stmt->close();
 
 $date = date("j");
 $sql = "SELECT * FROM d$date WHERE username = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
+if($stmt){
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+}else{
+    echo "ERROR";
+}
+
 
 
 $status = "tidak hadir";

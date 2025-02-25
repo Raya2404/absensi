@@ -8,7 +8,8 @@ $password = password_hash("123", PASSWORD_DEFAULT);
 $sql = "INSERT INTO users(username, password, role) VALUES('dayat', '$password', 'user')";
 $conn->query($sql);
 */
-/*for($i = 1; $i < 32; $i++){
+/*
+for($i = 1; $i < 32; $i++){
     $sql = "CREATE TABLE d$i(
     username VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
@@ -18,14 +19,22 @@ $conn->query($sql);
     )";
 
     $conn->query($sql);
-}*/
-
+}
+*/
 // drop all
 
+/*
 $sql = "DROP TABLE 'd1',";
 for($i = 2; $i < 32; $i++){
     $sql .= ",'d$i'";
 }
 $conn->query($sql);
+*/
+
+// setup attendance param file
+
+$fSetting = fopen("setting.R2", "w+");
+
+fwrite($fSetting, json_encode(array("masuk" => "07:00", "pulang" => "16:30")));
 
 ?>
